@@ -3,7 +3,7 @@ const app = require('../index')
 
 describe('Test store, update, get and delete functinalities from user RESTful API', () => {
   it('get user but none created yet', async () => {
-    const res = await request(app)
+    await request(app)
       .get('/usuario')
       .then((response) => {
         expect(response.statusCode).toEqual(200);
@@ -13,7 +13,7 @@ describe('Test store, update, get and delete functinalities from user RESTful AP
       })
   })
   it('delete user but none created yet', async () => {
-    const res = await request(app)
+    await request(app)
       .delete('/usuario')
       .then((response) => {
         expect(response.statusCode).toEqual(200);
@@ -23,7 +23,7 @@ describe('Test store, update, get and delete functinalities from user RESTful AP
       })
   })
   it('create new user with invalid parameters', async () => {
-    const res = await request(app)
+    await request(app)
       .post('/usuario')
       .send({
         "nombre2": 'nombre1',
@@ -37,7 +37,7 @@ describe('Test store, update, get and delete functinalities from user RESTful AP
       })
   })
   it('create new user successfully', async () => {
-    const res = await request(app)
+    await request(app)
       .post('/usuario')
       .send({
         "nombre": 'nombre1',
@@ -53,7 +53,7 @@ describe('Test store, update, get and delete functinalities from user RESTful AP
       })
   })
   it('create new user twice', async () => {
-    const res = await request(app)
+    await request(app)
       .post('/usuario')
       .send({
         "nombre": 'nombre1',
@@ -79,7 +79,7 @@ describe('Test store, update, get and delete functinalities from user RESTful AP
       })
   })
   it('update user with invalid parameters', async () => {
-    const res = await request(app)
+    await request(app)
       .put('/usuario')
       .send({
         "nombre2": 'nombre1',
@@ -109,7 +109,7 @@ describe('Test store, update, get and delete functinalities from user RESTful AP
       })
   })
   it('get user just updated', async () => {
-    const res = await request(app)
+    await request(app)
       .get('/usuario')
       .then((response) => {
         expect(response.statusCode).toEqual(200);
@@ -121,7 +121,7 @@ describe('Test store, update, get and delete functinalities from user RESTful AP
       })
   })
   it('delete user just updated', async () => {
-    const res = await request(app)
+    await request(app)
       .get('/usuario')
       .then((response) => {
         expect(response.statusCode).toEqual(200);
@@ -133,7 +133,7 @@ describe('Test store, update, get and delete functinalities from user RESTful AP
       })
   })
   it('delete user successfully', async () => {
-    const res = await request(app)
+    await request(app)
       .delete('/usuario')
       .then((response) => {
         expect(response.statusCode).toEqual(200);
@@ -143,7 +143,7 @@ describe('Test store, update, get and delete functinalities from user RESTful AP
       })
   })
   it('get user but just removed', async () => {
-    const res = await request(app)
+    await request(app)
       .get('/usuario')
       .then((response) => {
         expect(response.statusCode).toEqual(200);

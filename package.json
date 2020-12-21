@@ -4,7 +4,6 @@
   "description": "API rest in NodeJS with express framework for training purposes",
   "main": "index.js",
   "scripts": {
-    "start-dev": "nodemon index.js",
     "test": "jest --forceExit"
   },
   "repository": {
