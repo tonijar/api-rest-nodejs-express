@@ -29,6 +29,28 @@
 			"response": []
 		},
 		{
+			"name": "get user with partial response",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": ""
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "get unknown path",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": ""
+				}
+			},
+			"response": []
+		},
+		{
 			"name": "update user",
 			"request": {
 				"method": "GET",
@@ -44,7 +66,6 @@
 		{
 			"listen": "prerequest",
 			"script": {
-				"id": "1c273850-5c21-4cce-897c-3ff42d254dad",
 				"type": "text/javascript",
 				"exec": [
 					""
@@ -54,13 +75,11 @@
 		{
 			"listen": "test",
 			"script": {
-				"id": "8959da86-a30e-4b65-9618-7172eeb1bc93",
 				"type": "text/javascript",
 				"exec": [
 					""
 				]
 			}
 		}
-	],
-	"protocolProfileBehavior": {}
+	]
 }

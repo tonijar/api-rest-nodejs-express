@@ -1,158 +1,191 @@
-const request = require('supertest')
-const app = require('../index')
+const request = require('supertest');
+const app = require('../index');
 
 describe('Test store, update, get and delete functinalities from user RESTful API', () => {
   it('get user but none created yet', async () => {
     await request(app)
-      .get('/usuario')
+      .get('/user')
       .then((response) => {
         expect(response.statusCode).toEqual(200);
         expect(response.body["error"]).toEqual(true);
-        expect(response.body["codigo"]).toEqual(501);
-        expect(response.body["mensaje"]).toEqual('El usuario no ha sido creado');
-      })
-  })
+        expect(response.body["code"]).toEqual(501);
+        expect(response.body["message"]).toEqual('User not created');
+      });
+  });
   it('delete user but none created yet', async () => {
     await request(app)
-      .delete('/usuario')
+      .delete('/user')
       .then((response) => {
         expect(response.statusCode).toEqual(200);
         expect(response.body["error"]).toEqual(true);
-        expect(response.body["codigo"]).toEqual(501);
-        expect(response.body["mensaje"]).toEqual('El usuario no ha sido creado');
-      })
-  })
+        expect(response.body["code"]).toEqual(501);
+        expect(response.body["message"]).toEqual('User not created');
+      });
+  });
   it('create new user with invalid parameters', async () => {
     await request(app)
-      .post('/usuario')
+      .post('/user')
       .send({
-        "nombre2": 'nombre1',
-        "apellido2": 'apellido1',
+        "name2": 'name1',
+        "surname2": 'surname1',
       })
       .then((response) => {
         expect(response.statusCode).toEqual(200);
         expect(response.body["error"]).toEqual(true);
-        expect(response.body["codigo"]).toEqual(502);
-        expect(response.body["mensaje"]).toEqual('El campo nombre y apellido son requeridos');
-      })
-  })
+        expect(response.body["code"]).toEqual(502);
+        expect(response.body["message"]).toEqual('Name and surname fields required');
+      });
+  });
   it('create new user successfully', async () => {
     await request(app)
-      .post('/usuario')
+      .post('/user')
       .send({
-        "nombre": 'nombre1',
-        "apellido": 'apellido1',
+        "name": 'name1',
+        "surname": 'surname1',
       })
       .then((response) => {
         expect(response.statusCode).toEqual(200);
         expect(response.body["error"]).toEqual(false);
-        expect(response.body["codigo"]).toEqual(200);
-        expect(response.body["mensaje"]).toEqual('Usuario creado');
-        expect(response.body["respuesta"]["nombre"]).toEqual('nombre1');
-        expect(response.body["respuesta"]["apellido"]).toEqual('apellido1');
-      })
-  })
+        expect(response.body["code"]).toEqual(200);
+        expect(response.body["message"]).toEqual('User created');
+        expect(response.body["response"]["name"]).toEqual('name1');
+        expect(response.body["response"]["surname"]).toEqual('surname1');
+      });
+  });
   it('create new user twice', async () => {
     await request(app)
-      .post('/usuario')
+      .post('/user')
       .send({
-        "nombre": 'nombre1',
-        "apellido": 'apellido1',
+        "name": 'name1',
+        "surname": 'surname1',
       })
       .then((response) => {
         expect(response.statusCode).toEqual(200);
         expect(response.body["error"]).toEqual(true);
-        expect(response.body["mensaje"]).toEqual('El usuario ya fue creado previamente');
-        expect(response.body["codigo"]).toEqual(503);
-      })
-  })
+        expect(response.body["message"]).toEqual('User already created previously');
+        expect(response.body["code"]).toEqual(503);
+      });
+  });
   it('get user just created', async () => {
-    const res = await request(app)
-      .get('/usuario')
+    await request(app)
+      .get('/user')
       .then((response) => {
         expect(response.statusCode).toEqual(200);
         expect(response.body["error"]).toEqual(false);
-        expect(response.body["codigo"]).toEqual(200);
-        expect(response.body["mensaje"]).toEqual('respuesta del usuario');
-        expect(response.body["respuesta"]["nombre"]).toEqual('nombre1');
-        expect(response.body["respuesta"]["apellido"]).toEqual('apellido1');
-      })
-  })
+        expect(response.body["code"]).toEqual(200);
+        expect(response.body["message"]).toEqual('User response');
+        expect(response.body["response"]["name"]).toEqual('name1');
+        expect(response.body["response"]["surname"]).toEqual('surname1');
+      });
+  });
+  it('get entire user with partial response', async () => {
+    await request(app)
+      .get('/user?fields=error,code,message,response')
+      .then((response) => {
+        expect(response.statusCode).toEqual(200);
+        expect(response.body["error"]).toEqual(false);
+        expect(response.body["code"]).toEqual(200);
+        expect(response.body["message"]).toEqual('User response');
+        expect(response.body["response"]["name"]).toEqual('name1');
+        expect(response.body["response"]["surname"]).toEqual('surname1');
+      });
+  });
+  it('get only some user fields with partial response', async () => {
+    await request(app)
+      .get('/user?fields=error,code,response')
+      .then((response) => {
+        expect(response.statusCode).toEqual(200);
+        expect(response.body["error"]).toEqual(false);
+        expect(response.body["code"]).toEqual(200);
+        expect(response.body["message"]).toEqual(undefined);
+        expect(response.body["response"]["name"]).toEqual('name1');
+        expect(response.body["response"]["surname"]).toEqual('surname1');
+      });
+  });
   it('update user with invalid parameters', async () => {
     await request(app)
-      .put('/usuario')
+      .put('/user')
       .send({
-        "nombre2": 'nombre1',
-        "apellido2": 'apellido1',
+        "name2": 'name1',
+        "surname2": 'surname1',
       })
       .then((response) => {
         expect(response.statusCode).toEqual(200);
         expect(response.body["error"]).toEqual(true);
-        expect(response.body["codigo"]).toEqual(502);
-        expect(response.body["mensaje"]).toEqual('El campo nombre y apellido son requeridos');
-      })
-  })
+        expect(response.body["code"]).toEqual(502);
+        expect(response.body["message"]).toEqual('Name and surname fields required');
+      });
+  });
   it('update user with successfully', async () => {
-    const res = await request(app)
-      .put('/usuario')
+    await request(app)
+      .put('/user')
       .send({
-        "nombre": 'nombre2',
-        "apellido": 'apellido2',
+        "name": 'name2',
+        "surname": 'surname2',
       })
       .then((response) => {
         expect(response.statusCode).toEqual(200);
         expect(response.body["error"]).toEqual(false);
-        expect(response.body["codigo"]).toEqual(200);
-        expect(response.body["mensaje"]).toEqual('Usuario actualizado');
-        expect(response.body["respuesta"]["nombre"]).toEqual('nombre2');
-        expect(response.body["respuesta"]["apellido"]).toEqual('apellido2');
-      })
-  })
+        expect(response.body["code"]).toEqual(200);
+        expect(response.body["message"]).toEqual('User updated');
+        expect(response.body["response"]["name"]).toEqual('name2');
+        expect(response.body["response"]["surname"]).toEqual('surname2');
+      });
+  });
   it('get user just updated', async () => {
     await request(app)
-      .get('/usuario')
+      .get('/user')
       .then((response) => {
         expect(response.statusCode).toEqual(200);
         expect(response.body["error"]).toEqual(false);
-        expect(response.body["codigo"]).toEqual(200);
-        expect(response.body["mensaje"]).toEqual('respuesta del usuario');
-        expect(response.body["respuesta"]["nombre"]).toEqual('nombre2');
-        expect(response.body["respuesta"]["apellido"]).toEqual('apellido2');
-      })
-  })
-  it('delete user just updated', async () => {
-    await request(app)
-      .get('/usuario')
-      .then((response) => {
-        expect(response.statusCode).toEqual(200);
-        expect(response.body["error"]).toEqual(false);
-        expect(response.body["codigo"]).toEqual(200);
-        expect(response.body["mensaje"]).toEqual('respuesta del usuario');
-        expect(response.body["respuesta"]["nombre"]).toEqual('nombre2');
-        expect(response.body["respuesta"]["apellido"]).toEqual('apellido2');
-      })
-  })
+        expect(response.body["code"]).toEqual(200);
+        expect(response.body["message"]).toEqual('User response');
+        expect(response.body["response"]["name"]).toEqual('name2');
+        expect(response.body["response"]["surname"]).toEqual('surname2');
+      });
+  });
   it('delete user successfully', async () => {
     await request(app)
-      .delete('/usuario')
+      .delete('/user')
       .then((response) => {
         expect(response.statusCode).toEqual(200);
         expect(response.body["error"]).toEqual(false);
-        expect(response.body["codigo"]).toEqual(200);
-        expect(response.body["mensaje"]).toEqual('Usuario eliminado');
-      })
-  })
+        expect(response.body["code"]).toEqual(200);
+        expect(response.body["message"]).toEqual('User deleted');
+      });
+  });
   it('get user but just removed', async () => {
     await request(app)
-      .get('/usuario')
+      .get('/user')
       .then((response) => {
         expect(response.statusCode).toEqual(200);
         expect(response.body["error"]).toEqual(true);
-        expect(response.body["codigo"]).toEqual(501);
-        expect(response.body["mensaje"]).toEqual('El usuario no ha sido creado');
-      })
-  })
-})
-
-
-
+        expect(response.body["code"]).toEqual(501);
+        expect(response.body["message"]).toEqual('User not created');
+      });
+  });
+  it('access unknown path', async () => {
+    await request(app)
+      .get('/unknown_path')
+      .then((response) => {
+        expect(response.statusCode).toEqual(404);
+        expect(response.body["error"]).toEqual(true);
+        expect(response.body["code"]).toEqual(404);
+        expect(response.body["message"]).toEqual('URL not found');
+      });
+  });
+  it('access static content', async () => {
+    await request(app)
+      .get('/static/test.txt')
+      .then((response) => {
+        expect(response.statusCode).toEqual(200);
+      });
+  });
+  it('access static unknown content', async () => {
+    await request(app)
+      .get('/static/unknown_file.txt')
+      .then((response) => {
+        expect(response.statusCode).toEqual(404);
+      });
+  });
+});
