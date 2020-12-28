@@ -1,6 +1,7 @@
 var userDomain = require('../domain/user');
 let user = userDomain.user;
 let response = userDomain.response;
+const { BadRequest } = require('../arch/errors');
 
 module.exports = (app) => {
     app.route('/user')
@@ -28,11 +29,7 @@ module.exports = (app) => {
         })
         .post(function (req, res) {
             if (!req.body.name || !req.body.surname) {
-                response = {
-                    error: true,
-                    code: 502,
-                    message: 'Name and surname fields required'
-                };
+                throw new BadRequest('Name and surname fields required');
             } else {
                 if (user.name !== '' || user.surname !== '') {
                     response = {
@@ -57,11 +54,7 @@ module.exports = (app) => {
         })
         .put(function (req, res) {
             if (!req.body.name || !req.body.surname) {
-                response = {
-                    error: true,
-                    code: 502,
-                    message: 'Name and surname fields required'
-                };
+                throw new BadRequest('Name and surname fields required');
             } else {
                 if (user.name === '' || user.surname === '') {
                     response = {

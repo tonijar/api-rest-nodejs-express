@@ -30,10 +30,7 @@ describe('Test store, update, get and delete functinalities from user RESTful AP
         "surname2": 'surname1',
       })
       .then((response) => {
-        expect(response.statusCode).toEqual(200);
-        expect(response.body["error"]).toEqual(true);
-        expect(response.body["code"]).toEqual(502);
-        expect(response.body["message"]).toEqual('Name and surname fields required');
+        expect(response.statusCode).toEqual(400);
       });
   });
   it('create new user successfully', async () => {
@@ -110,10 +107,7 @@ describe('Test store, update, get and delete functinalities from user RESTful AP
         "surname2": 'surname1',
       })
       .then((response) => {
-        expect(response.statusCode).toEqual(200);
-        expect(response.body["error"]).toEqual(true);
-        expect(response.body["code"]).toEqual(502);
-        expect(response.body["message"]).toEqual('Name and surname fields required');
+        expect(response.statusCode).toEqual(400);
       });
   });
   it('update user with successfully', async () => {
